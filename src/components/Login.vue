@@ -1,6 +1,7 @@
 <template>
   <div class="Login">
     我是login组件
+    <div>ff</div>
   </div>
 </template>
 
