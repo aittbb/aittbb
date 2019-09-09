@@ -1,7 +1,7 @@
 <template>
-  <div class="Login">
+  <div class="login">
     我是login组件
-    <div>ff</div>
+    <el-button type="success" plain circle>成功的按钮</el-button>
   </div>
 </template>
 

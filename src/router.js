@@ -9,6 +9,6 @@ export default new VueRouter({
   routers: [
     { path: '/', redirect: '/login' },
     { path: '/login', component: Login },
-    { path: '/Home', component: Home }
+    { path: '/home', component: Home }
   ]
 })
