@@ -5,10 +5,22 @@ import Home from './components/Home.vue'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     { path: '/', redirect: '/login' },
     { path: '/login', component: Login },
     { path: '/home', component: Home }
   ]
 })
+
+// 路由守卫.判断是否有token,
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  if (to.path === '/login' || token) {
+    next()
+  } else {
+    next('/login')
+  }
+})
+
+export default router
