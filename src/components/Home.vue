@@ -15,56 +15,43 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <el-col :span="12">
-            <el-menu
-              default-active="2"
-              class="el-menu-vertical-demo"
-              @open="handleOpen"
-              @close="handleClose"
-              background-color="#545c64"
-              text-color="#fff"
-              active-text-color="#ffd04b">
-              <el-submenu index="1">
-                <template slot="title">
-                  <i class="el-icon-location"></i>
-                  <span>导航一</span>
-                </template>
-                <el-menu-item-group>
-                  <template slot="title">分组一</template>
-                  <el-menu-item index="1-1">选项1</el-menu-item>
-                  <el-menu-item index="1-2">选项2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="分组2">
-                  <el-menu-item index="1-3">选项3</el-menu-item>
-                </el-menu-item-group>
-                <el-submenu index="1-4">
-                  <template slot="title">选项4</template>
-                  <el-menu-item index="1-4-1">选项1</el-menu-item>
-                </el-submenu>
-              </el-submenu>
-              <el-menu-item index="2">
-                <i class="el-icon-menu"></i>
-                <span slot="title">导航二</span>
-              </el-menu-item>
-              <el-menu-item index="3" disabled>
-                <i class="el-icon-document"></i>
-                <span slot="title">导航三</span>
-              </el-menu-item>
-              <el-menu-item index="4">
-                <i class="el-icon-setting"></i>
-                <span slot="title">导航四</span>
-              </el-menu-item>
-            </el-menu>
-          </el-col>
+          <!-- default-active 显示高亮 -->
+          <el-menu
+            :default-active="active"
+            unique-opened
+            router
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+            <el-submenu :index="menu.path" v-for='menu in menuList' :key='menu.id'>
+              <template v-slot:title>
+                <i class="el-icon-location"></i>
+                <span>{{menu.authName}}</span>
+              </template>
+                <el-menu-item :index="item.path" v-for='item in menu.children' :key='item.id'>
+                  <i class="el-icon-menu"></i>
+                  <span slot="title">{{item.authName}}</span>
+                </el-menu-item>
+            </el-submenu>
+          </el-menu>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <!-- 子路由的出口 -->
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  data () {
+    return {
+      menuList: []
+    }
+  },
   methods: {
     logOut () {
       // 给用户一个提示
@@ -83,13 +70,21 @@ export default {
         .catch(() => {
           this.$message('操作取消')
         })
-    },
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
     }
+  },
+  computed: {
+    active () {
+      return this.$route.path.slice(1)
+    }
+  },
+  created () {
+    axios.get('http://localhost:8888/api/private/v1/menus', { headers: { Authorization: localStorage.getItem('token') } }).then(res => {
+      console.log(res.data)
+      const { meta, data } = res.data
+      if (meta.status === 200) {
+        this.menuList = data
+      }
+    })
   }
 }
 </script>
@@ -132,6 +127,9 @@ export default {
     height: 100%;
     .el-aside {
       background-color: #545c64;
+      .el-submenu {
+        width: 200px;
+      }
     }
     .el-main {
       height: 100%;
