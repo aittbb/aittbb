@@ -79,7 +79,7 @@ export default {
   },
   created () {
     axios.get('http://localhost:8888/api/private/v1/menus', { headers: { Authorization: localStorage.getItem('token') } }).then(res => {
-      console.log(res.data)
+      // console.log(res.data)
       const { meta, data } = res.data
       if (meta.status === 200) {
         this.menuList = data

@@ -1,5 +1,5 @@
 <template>
-  <div>Users组件</div>
+  <div>Params组件</div>
 </template>
 
 <script>
