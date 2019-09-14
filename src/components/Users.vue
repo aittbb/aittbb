@@ -6,6 +6,8 @@
       <el-breadcrumb-item>活动管理</el-breadcrumb-item>
     </el-breadcrumb>
 
+    <!-- 搜索 -->
+
     <!-- 表格 -->
     <template>
       <el-table
@@ -60,7 +62,7 @@
 </template>
 
 <script>
-import Axios from 'axios'
+// import Axios from 'axios'
 export default {
   data () {
     return {
@@ -72,24 +74,18 @@ export default {
     }
   },
   methods: {
-    getAxios () {
-      Axios.get('http://localhost:8888/api/private/v1/users', {
+    async getAxios () {
+      const { meta, data } = await this.$axios.get('users', {
         params: {
           query: this.query,
           pagenum: this.pagenum,
           pagesize: this.pagesize
-        },
-        headers: {
-          Authorization: localStorage.getItem('token')
-        }
-      }).then(res => {
-        console.log(res)
-        const { meta, data } = res.data
-        if (meta.status === 200) {
-          this.tableData = data.users
-          this.total = data.total
         }
       })
+      if (meta.status === 200) {
+        this.tableData = data.users
+        this.total = data.total
+      }
     },
     getPagenum (val) {
       this.pagenum = val

@@ -25,7 +25,7 @@
 
 <script>
 
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data () {
@@ -70,32 +70,63 @@ export default {
     resetForm () {
       this.$refs.resetForm.resetFields()
     },
-    login () {
-      // valid 表单是否校验成功
-      this.$refs.resetForm.validate(valid => {
-        if (!valid) return false
-        axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
-          // console.log(res.data)
-          const { meta, data } = res.data
-          if (meta.status === 200) {
-            // 存储token
-            localStorage.setItem('token', data.token)
-            this.$router.push('/home')
-            // 成功的提示
-            this.$message({
-              type: 'success',
-              message: meta.msg,
-              duration: 1000
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: meta.msg,
-              duration: 1000
-            })
-          }
-        })
-      })
+    // 正常的代码.
+    // login () {
+    //   // valid 表单是否校验成功
+    //   this.$refs.resetForm.validate(valid => {
+    //     if (!valid) return false
+    //     this.$axios.post('login', this.form).then(res => {
+    //       // console.log(res.data)
+    //       const { meta, data } = res
+    //       if (meta.status === 200) {
+    //         // 存储token
+    //         localStorage.setItem('token', data.token)
+    //         this.$router.push('/home')
+    //         // 成功的提示
+    //         this.$message({
+    //           type: 'success',
+    //           message: meta.msg,
+    //           duration: 1000
+    //         })
+    //       } else {
+    //         this.$message({
+    //           type: 'error',
+    //           message: meta.msg,
+    //           duration: 1000
+    //         })
+    //       }
+    //     })
+    //   })
+    // }
+    // 用promise,async与await,try与catch改写login
+    async login () {
+      // try catch 处理成功和失败结果.不会影响下面代码的执行,就是不会报错
+      try { // 成功
+        // 等待表单校验成功
+        await this.$refs.resetForm.validate()
+        // 校验成功后发送axios
+        const { meta, data } = await this.$axios.post('login', this.form)
+        console.log(meta)
+        if (meta.status === 200) {
+          // 存储token
+          localStorage.setItem('token', data.token)
+          this.$router.push('/home') // 跳转到home
+          // 并且提示成功信息
+          this.$message({
+            type: 'success',
+            message: meta.msg,
+            duration: 1000 // 提示显示的时间
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: meta.msg,
+            duration: 1000
+          })
+        }
+      } catch (e) { // 失败结果
+        return false
+      }
     }
   }
 }

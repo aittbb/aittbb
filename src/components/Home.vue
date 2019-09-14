@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   data () {
     return {
@@ -53,20 +53,16 @@ export default {
     }
   },
   methods: {
-    logOut () {
+    async logOut () {
       // 给用户一个提示
       // 参数1：提示内容
-      this.$confirm('你确定要退出吗?', '温馨提示', {
-        type: 'warning'
-      })
-        .then(() => {
-          // 点击确定了
-          localStorage.removeItem('token')
-          // 跳转到登录页
-          this.$router.push('/login')
-          // 提示
-          this.$message.success('退出成功')
-        })
+      await this.$confirm('你确定要退出吗?', '温馨提示', { type: 'warning' })
+      // 点击确定了
+      localStorage.removeItem('token')
+      // 跳转到登录页
+      this.$router.push('/login')
+      // 提示
+      this.$message.success('退出成功')
         .catch(() => {
           this.$message('操作取消')
         })
@@ -78,9 +74,9 @@ export default {
     }
   },
   created () {
-    axios.get('http://localhost:8888/api/private/v1/menus', { headers: { Authorization: localStorage.getItem('token') } }).then(res => {
+    this.$axios.get('menus').then(res => {
       // console.log(res.data)
-      const { meta, data } = res.data
+      const { meta, data } = res
       if (meta.status === 200) {
         this.menuList = data
       }
