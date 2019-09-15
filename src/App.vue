@@ -18,4 +18,13 @@ export default {
   body {
     height: 100%;
   }
+  body {
+  .el-breadcrumb {
+    padding-left: 10px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #ddd;
+    margin-bottom: 10px;
+   }
+ }
 </style>
