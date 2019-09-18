@@ -309,7 +309,7 @@ export default {
       this.assignForm.username = row.username
       this.assignForm.id = row.id
 
-      // 回显
+      // 回显rid
       const { meta, data } = await this.$axios.get(`users/${row.id}`)
       // console.log(meta, data)
       if (meta.status === 200) {

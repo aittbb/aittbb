@@ -107,9 +107,9 @@ export default {
     },
     async showAssignDialog (row) {
       this.dialogVisible = true
-      console.log(row)
+      // console.log(row)
       const { meta, data } = await this.$axios.get('rights/tree')
-      console.log(meta, data)
+      // console.log(meta, data)
       if (meta.status === 200) {
         // 要展示的数据
         this.rightList = data
