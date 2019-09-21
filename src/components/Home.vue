@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     active () {
-      return this.$route.path.slice(1)
+      return this.$route.path.slice(1).split('-')[0]
     }
   },
   created () {
